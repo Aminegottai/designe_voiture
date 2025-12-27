@@ -1,0 +1,136 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil - Car3D AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <style>
+        /* Reset et body */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header / navbar */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: rgba(0,0,0,0.4);
+        }
+
+        header h1 {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #ffd700;
+        }
+
+        /* Hero section */
+        .hero {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            flex-direction: column;
+            flex: 1;
+            padding: 50px 20px;
+        }
+
+        .hero-content {
+            max-width: 700px;
+        }
+
+        .hero h2 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        /* Modèle 3D */
+        model-viewer {
+            width: 100%;
+            max-width: 700px;
+            height: 500px;
+            margin: 20px auto 0;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0,0,0,0.4);
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h2 { font-size: 36px; }
+            .hero p { font-size: 16px; }
+            model-viewer { height: 300px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Car3D AI</h1>
+    <nav>
+        <a href="{% url 'login' %}">Connexion</a>
+        <a href="{% url 'signup' %}">Inscription</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <div class="hero-content">
+        <h2>Transformez votre voiture en modèle 3D avec l'IA</h2>
+        <p>
+            Car3D AI vous permet de télécharger l'image de votre voiture, 
+            et grâce à notre intelligence artificielle avancée, 
+            nous générons un modèle 3D précis et interactif. Essayez-le dès maintenant !
+        </p>
+
+        <!-- Modèle 3D après le paragraphe -->
+        <model-viewer 
+            src="{% static 'models/car_model.glb' %}" 
+            alt="Modèle 3D de voiture" 
+            auto-rotate 
+            camera-controls 
+            shadow-intensity="1">
+        </model-viewer>
+    </div>
+</section>
+
+<footer>
+    &copy; 2025 Car3D AI. Tous droits réservés.
+</footer>
+
+</body>
+</html>

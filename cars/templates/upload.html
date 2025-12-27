@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h1>Upload Car Image</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Detect</button>
+    </form>
+</body>
+</html>

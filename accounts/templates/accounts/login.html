@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion</title>
+    <style>
+        /* Body */
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        /* Container du formulaire */
+        .form-container {
+            background: white;
+            padding: 40px 50px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            color: #333;
+        }
+
+        /* Conteneur de chaque champ pour espacement */
+        .field-wrapper {
+            margin-bottom: 20px; 
+        }
+
+        /* Style de l'étiquette (Label) */
+        label {
+            display: block; 
+            margin-bottom: 5px; 
+            font-weight: 600; 
+            color: #555;
+            font-size: 14px;
+        }
+
+        /* Inputs */
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            outline: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-sizing: border-box; 
+        }
+
+        input:focus {
+            border-color: #6a11cb;
+            box-shadow: 0 0 5px rgba(106, 17, 203, 0.5);
+        }
+
+        /* Bouton */
+        button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 10px; 
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Messages Django */
+        .django-messages {
+            list-style: none;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        
+        .django-messages.error {
+            background-color: #f8d7da; 
+            color: #721c24; 
+            border: 1px solid #f5c6cb;
+        }
+
+        .django-messages.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* Erreurs de champ */
+        .errorlist {
+            color: red;
+            list-style: none;
+            padding-left: 0;
+            margin-top: 5px;
+            margin-bottom: 0;
+            font-size: 0.9em;
+        }
+
+        /* Lien bas */
+        .bottom-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .bottom-link a {
+            color: #6a11cb;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Connexion</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <ul class="django-messages {{ message.tags }}"> 
+                <li>{{ message }}</li>
+            </ul>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="field-wrapper">
+            {{ form.username.label_tag }}
+            {{ form.username }}
+            {{ form.username.errors }}
+        </div>
+
+        <div class="field-wrapper">
+            {{ form.password.label_tag }}
+            {{ form.password }}
+            {{ form.password.errors }}
+        </div>
+
+        <button type="submit">Se connecter</button>
+    </form>
+
+    <p class="bottom-link">
+        <a href="{% url 'signup' %}">Pas encore de compte ? Inscrivez-vous</a>
+    </p>
+</div>
+
+</body>
+</html>
