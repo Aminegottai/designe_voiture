@@ -1,7 +1,13 @@
 from django.urls import path
 from . import views
 
+app_name = "cars"
+
 urlpatterns = [
-    path("", views.upload_view, name="upload"),
-    path("result/<int:pk>/", views.result_view, name="result"),
+    path("", views.home, name="home"),           # accueil
+    path("upload/", views.upload_car, name="upload"),
+    path("design/<int:pk>/", views.car_detail, name="car_detail"),
+    path("design/<int:pk>/import/", views.import_latest_generated, name="import_generated"),
+    path("base/", views.base_page, name="base"),
+    path("renders/new/", views.render_new, name="render_new"),
 ]

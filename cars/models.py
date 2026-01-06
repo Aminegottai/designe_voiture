@@ -1,9 +1,14 @@
 from django.db import models
+from django.conf import settings
 
-class CarImage(models.Model):
-    image = models.ImageField(upload_to="uploads/")
-    result_image = models.ImageField(upload_to="results/", blank=True, null=True)
-    detected_label = models.CharField(max_length=255, blank=True)
+class CarDesign(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    original_image = models.ImageField(upload_to='uploads/')
+    generated_image = models.ImageField(upload_to='designs/', blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.detected_label or "No label"
+        return f"Design #{self.id} par {self.user.username}"
+
+    class Meta:
+        ordering = ['-created_at']

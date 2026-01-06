@@ -1,0 +1,318 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>CarStudio – Accueil</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --accent: #2563eb;
+      --accent-2: #10b981;
+      --border: #e2e8f0;
+      --shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+      --radius: 18px;
+      --radius-sm: 12px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Inter", "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* NAVBAR */
+    .navbar {
+      position: sticky; top: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 28px;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; color: #0f172a; }
+    .brand-dot { width: 12px; height: 12px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 0 14px rgba(37,99,235,0.5); }
+    .nav-links { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+    .nav-link {
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      color: var(--muted);
+      font-weight: 600;
+      transition: 0.2s ease;
+    }
+    .nav-link:hover { color: var(--text); background: rgba(37,99,235,0.08); }
+
+    .btn {
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn:hover { box-shadow: 0 10px 22px rgba(0,0,0,0.08); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #1d4ed8);
+      color: #fff;
+      border: none;
+      box-shadow: 0 12px 30px rgba(37,99,235,0.35);
+    }
+    .btn-ghost { background: #fff; }
+
+    /* LAYOUT */
+    .page { max-width: 1180px; margin: 0 auto; padding: 28px 20px 60px; }
+    .hero {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 22px; align-items: center;
+      margin: 18px 0 28px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+    h1 { margin: 10px 0 12px; font-size: clamp(30px, 4vw, 38px); line-height: 1.1; }
+    .subtitle { margin: 0 0 16px; color: var(--muted); font-size: 16px; line-height: 1.6; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 12px; border-radius: 999px;
+      background: rgba(37,99,235,0.12);
+      color: #1d4ed8; font-weight: 700; font-size: 13px;
+    }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    /* Sections */
+    .section-title { margin: 0 0 6px; font-size: 20px; }
+    .section-sub { margin: 0 0 16px; color: var(--muted); font-size: 14px; }
+
+    /* Grids & Features */
+    .grid { display: grid; gap: 16px; }
+    .grid.two { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    .feature {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 14px; border-radius: var(--radius-sm);
+      background: #f8fafc;
+      border: 1px solid var(--border);
+    }
+    .feature-icon {
+      width: 40px; height: 40px; border-radius: 12px;
+      background: #e0ecff; color: #1d4ed8;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-weight: 700;
+    }
+    .feature h3 { margin: 0 0 6px; font-size: 16px; }
+    .feature p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+
+    /* Before/After */
+    .before-after {
+      display: grid; gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+    .ba-item {
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+    }
+    .ba-img {
+      width: 100%; aspect-ratio: 4/3;
+      object-fit: cover; display: block;
+      background: #e2e8f0;
+    }
+    .ba-label { padding: 10px 12px; color: var(--muted); font-weight: 600; font-size: 14px; }
+
+    /* Testimonials */
+    .testimonial {
+      padding: 16px;
+      border-radius: var(--radius-sm);
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      color: var(--text);
+      line-height: 1.5;
+      box-shadow: 0 12px 24px rgba(15,23,42,0.06);
+    }
+    .testimonial strong { display: block; margin-top: 8px; color: var(--accent); }
+
+    /* CTA */
+    .cta {
+      text-align: center;
+      padding: 24px;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(37,99,235,0.12), rgba(16,185,129,0.12));
+      border: 1px solid rgba(37,99,235,0.18);
+      box-shadow: var(--shadow);
+    }
+    .cta h2 { margin: 0 0 10px; }
+    .cta p { margin: 0 0 14px; color: var(--muted); }
+
+    /* Responsive */
+    @media (max_width: 768px) {
+      .navbar { padding: 14px 18px; }
+      .nav-links { display: none; }
+      .page { padding-top: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="/" class="brand">
+      <span class="brand-dot"></span> CarStudio
+    </a>
+    <div class="nav-links">
+      <a class="nav-link" href="#features">Fonctionnalités</a>
+      <a class="nav-link" href="#avant-apres">Avant/Après</a>
+      <a class="nav-link" href="#cta">Tarifs</a>
+      <a class="btn btn-primary" href="{% url 'accounts:login' %}">Connexion</a>
+    </div>
+  </nav>
+
+  <div class="page">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="card">
+        <span class="badge">Nouveau • AI Design</span>
+        <h1>Concevez des rendus auto premium avec l’IA.</h1>
+        <p class="subtitle">
+          Palette couleur, lignes affinées, rendu prêt à partager. Sans complexité, sans attente.
+        </p>
+        <div class="hero-actions">
+          {% if user.is_authenticated %}
+            <a class="btn btn-primary" href="{% url 'accounts:login' %}">Commencer</a>
+          {% else %}
+            <a class="btn btn-primary" href="{% url 'accounts:login' %}">Se connecter</a>
+            <a class="btn btn-ghost" href="{% url 'accounts:signup' %}">Créer un compte</a>
+          {% endif %}
+        </div>
+
+      </div>
+
+      <div class="card">
+        <div class="section-title" style="margin-bottom:8px;">Pourquoi CarStudio ?</div>
+        <div class="grid two">
+          <div class="feature">
+            <div class="feature-icon">⚡</div>
+            <div>
+              <h3>Rapide</h3>
+              <p>Rendus générés en quelques secondes.</p>
+            </div>
+          </div>
+          <div class="feature">
+            <div class="feature-icon">🎨</div>
+            <div>
+              <h3>Stylé</h3>
+              <p>Propositions de palettes et finitions premium.</p>
+            </div>
+          </div>
+          <div class="feature">
+            <div class="feature-icon">🧠</div>
+            <div>
+              <h3>Guidé par l’IA</h3>
+              <p>Adapté au brief : sport, luxe ou minimal.</p>
+            </div>
+          </div>
+          <div class="feature">
+            <div class="feature-icon">🔒</div>
+            <div>
+              <h3>Sécurisé</h3>
+              <p>Vos assets restent privés et protégés.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features" class="card" style="margin-top: 10px;">
+      <div class="section-title">Fonctionnalités clés</div>
+      <p class="section-sub">Tout ce dont vous avez besoin pour un rendu automobile de qualité.</p>
+      <div class="grid two">
+        <div class="feature">
+          <div class="feature-icon">🖼️</div>
+          <div>
+            <h3>Rendus HD</h3>
+            <p>Export 4K, prêts pour présentation ou réseaux.</p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🎚️</div>
+          <div>
+            <h3>Variantes</h3>
+            <p>Plusieurs itérations pour choisir votre style.</p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">📐</div>
+          <div>
+            <h3>Lignes affinées</h3>
+            <p>Propositions cohérentes et élégantes.</p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">📁</div>
+          <div>
+            <h3>Bibliothèque</h3>
+            <p>Retrouvez vos rendus en un clin d’œil.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BEFORE / AFTER -->
+    <section id="avant-apres" class="card" style="margin-top: 10px;">
+      <div class="section-title">Avant / Après</div>
+      <p class="section-sub">Visualisez la transformation en un regard.</p>
+      <div class="before-after">
+        <div class="ba-item">
+          <img class="ba-img" src="{% static 'img/sample-before.jpg' %}" alt="Avant">
+          <div class="ba-label">Avant</div>
+        </div>
+        <div class="ba-item">
+          <img class="ba-img" src="{% static 'img/sample-after.jpg' %}" alt="Après">
+          <div class="ba-label">Après (AI)</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="card" style="margin-top: 10px;">
+      <div class="section-title">Ils utilisent CarStudio</div>
+      <p class="section-sub">Designers, garages et créateurs.</p>
+      <div class="grid two">
+        <div class="testimonial">
+          “En moins d’une minute, j’ai un rendu crédible pour valider un concept.”
+          <strong>— Alex, designer</strong>
+        </div>
+        <div class="testimonial">
+          “Parfait pour mes posts : les variations couleur sont prêtes à publier.”
+          <strong>— Sarah, créatrice auto</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="cta" class="cta" style="margin-top: 10px;">
+      <h2>Démarrez votre premier rendu maintenant</h2>
+      <p>Accédez au studio et obtenez vos transformations AI en quelques clics.</p>
+      {% if user.is_authenticated %}
+        <a class="btn btn-primary" href="{% url 'cars:upload' %}">Aller au studio</a>
+      {% else %}
+        <a class="btn btn-primary" href="{% url 'accounts:signup' %}">Créer un compte</a>
+      {% endif %}
+    </section>
+
+  </div>
+</body>
+</html>

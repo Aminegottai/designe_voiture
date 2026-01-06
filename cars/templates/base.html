@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>{% block title %}CarStudio – Studio IA{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  {% block head_extra %}{% endblock %}
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --accent: #2563eb;
+      --accent-2: #10b981;
+      --border: #e2e8f0;
+      --shadow: 0 18px 50px rgba(15,23,42,0.08);
+      --radius: 18px;
+      --radius-sm: 12px;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Inter", "Segoe UI", system-ui, sans-serif; background: var(--bg); color: var(--text); }
+    a { text-decoration: none; color: inherit; }
+
+    .topbar {
+      position: sticky; top: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 24px;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo { font-weight: 800; font-size: 18px; color: var(--text); }
+    nav { display: none; }
+    .actions { display: flex; gap: 10px; align-items: center; }
+    .btn {
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-block;
+    }
+    .btn:hover { box-shadow: 0 10px 22px rgba(0,0,0,0.08); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #1d4ed8);
+      color: #fff;
+      border: none;
+      box-shadow: 0 12px 30px rgba(37,99,235,0.35);
+    }
+
+    .page { max-width: 1180px; margin: 0 auto; padding: 24px 20px 60px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      align-items: center;
+    }
+    .hero-title { margin: 10px 0 12px; font-size: clamp(28px, 4vw, 36px); }
+    .hero-sub { margin: 0 0 16px; color: var(--muted); font-size: 16px; line-height: 1.6; }
+    .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .upload-box {
+      min-height: 200px;
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted);
+      background: #f8fafc;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .chip {
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .chip:hover { border-color: var(--accent); color: var(--text); }
+    .chip.active { background: rgba(37,99,235,0.12); color: #1d4ed8; border-color: rgba(37,99,235,0.35); }
+
+    .grid { display: grid; gap: 16px; }
+    .grid.two { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    .grid.renders { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+
+    .render-item img {
+      width: 100%;
+      border-radius: var(--radius-sm);
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      background: #e2e8f0;
+    }
+    .render-item .meta { margin-top: 10px; }
+    .render-item .title { font-weight: 700; }
+    .render-item .sub { color: var(--muted); font-size: 14px; }
+    .render-item .actions { margin-top: 8px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .render-item .actions a { color: var(--accent); font-weight: 600; font-size: 14px; }
+
+    .section { margin-top: 18px; }
+    .section-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .section h2 { margin: 0; }
+
+    .activity { list-style: none; padding: 0; margin: 0; color: var(--muted); }
+    .activity li { margin-bottom: 8px; }
+
+    .cta {
+      text-align: center;
+      padding: 24px;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(37,99,235,0.12), rgba(16,185,129,0.12));
+      border: 1px solid rgba(37,99,235,0.18);
+      box-shadow: var(--shadow);
+    }
+
+    @media (max-width: 720px) {
+      .page { padding-top: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="logo">CarStudio</div>
+  <nav></nav>
+  <div class="actions">
+    <a class="btn btn-primary" href="{% url 'cars:upload' %}">Importer</a>
+    <a class="btn" href="{% url 'cars:upload' %}">Nouveau rendu</a>
+    <div class="user-menu">
+      {% if request.user.is_authenticated %}
+        {{ request.user.username }}
+      {% else %}
+        <a href="{% url 'accounts:login' %}">Se connecter</a>
+      {% endif %}
+    </div>
+  </div>
+</header>
+
+<main class="page">
+  {% block content %}
+  <section class="card">
+    <div class="hero-grid">
+      <div>
+        <div class="badge" style="display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(37,99,235,0.12);color:#1d4ed8;font-weight:700;font-size:13px;">IA Car Design</div>
+        <h1 class="hero-title">{{ hero_title|default:"Téléversez votre voiture, obtenez un design revisité" }}</h1>
+        <p class="hero-sub">
+          {{ hero_subtitle|default:"Importez une photo, choisissez un style (sport, luxe, minimal), et laissez l’IA générer des rendus premium prêts à partager." }}
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="{% url 'cars:upload' %}">Importer une image</a>
+          <a class="btn" href="{% url 'cars:upload' %}">Nouveau rendu guidé</a>
+        </div>
+      </div>
+      <div class="upload-box">
+        Glissez-déposez votre image ici<br>ou utilisez “Importer une image”.
+      </div>
+    </div>
+  </section>
+
+  <section class="stats grid two">
+    <div class="card">Rendus totaux<br><strong>{{ stats.total|default:"-" }}</strong></div>
+    <div class="card">En cours<br><strong>{{ stats.processing|default:"-" }}</strong></div>
+    <div class="card">Dernier rendu<br><strong>{{ stats.last_render|default:"-" }}</strong></div>
+    <div class="card">Espace utilisé<br><strong>{{ stats.storage|default:"-" }}</strong></div>
+  </section>
+
+  <section class="section card">
+    <div class="section-head">
+      <h2>Rendus récents</h2>
+      <div class="filters" style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="chip active" type="button">Tous</button>
+        <button class="chip" type="button">Terminés</button>
+        <button class="chip" type="button">En cours</button>
+        <button class="chip" type="button">Favoris</button>
+      </div>
+    </div>
+    <div class="grid renders" style="margin-top:12px;">
+      {% for render in renders %}
+        <article class="card render-item">
+          <img src="{{ render.thumbnail_url }}" alt="">
+          <div class="meta">
+            <div class="title">{{ render.title }}</div>
+            <div class="sub">{{ render.status }} • {{ render.age }}</div>
+          </div>
+          <div class="actions">
+            <a href="{{ render.detail_url }}">Ouvrir</a>
+            <a href="{{ render.duplicate_url }}">Dupliquer</a>
+            <a href="{{ render.download_url }}">Télécharger</a>
+          </div>
+        </article>
+      {% empty %}
+        <p style="color:var(--muted);">Aucun rendu pour le moment.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="section card">
+    <h2>Activité récente</h2>
+    <ul class="activity">
+      {% for entry in activity %}
+        <li>• {{ entry }}</li>
+      {% empty %}
+        <li style="color:var(--muted);">Aucune activité récente.</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section class="section card">
+    <h2>Templates (styles IA prêts à l’emploi)</h2>
+    <div class="grid two" style="margin-top:12px;">
+      {% for tpl in templates %}
+        <div class="card">
+          <div class="title" style="font-weight:700;">{{ tpl.name }}</div>
+          <p style="color:var(--muted);">{{ tpl.description }}</p>
+          <a class="btn btn-primary" href="{{ tpl.action_url }}">Utiliser</a>
+        </div>
+      {% empty %}
+        <p style="color:var(--muted);">Aucun template disponible.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="cta section">
+    <h2>Prêt pour un nouveau rendu ?</h2>
+    <p>Importez un visuel ou choisissez un template pour démarrer.</p>
+    <a class="btn btn-primary" href="{% url 'cars:upload' %}">Importer une image</a>
+  </section>
+  {% endblock %}
+</main>
+
+</body>
+</html>

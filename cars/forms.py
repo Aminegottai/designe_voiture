@@ -1,7 +1,10 @@
 from django import forms
-from .models import CarImage
+from .models import CarDesign
 
-class UploadImageForm(forms.ModelForm):
+class CarUploadForm(forms.ModelForm):
     class Meta:
-        model = CarImage
-        fields = ("image",)
+        model = CarDesign
+        fields = ['original_image']
+        labels = {
+            'original_image': 'Choisissez une image de voiture'
+        }

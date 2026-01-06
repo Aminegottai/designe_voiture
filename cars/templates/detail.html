@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Design #{{ design.id }}{% endblock %}
+
+{% block content %}
+<div class="card">
+  <h1>Image générée (IA)</h1>
+
+  {% if design.generated_image %}
+    <img src="{{ design.generated_image.url }}" alt="Image générée" style="width:100%;border-radius:12px;object-fit:cover;">
+    <p style="margin-top:12px;">
+      <a class="btn btn-primary" href="{{ design.generated_image.url }}" download>⬇ Télécharger l'image IA</a>
+    </p>
+  {% else %}
+    <p>Pas encore d'image générée.</p>
+    {% if user == design.user %}
+      <form method="post" action="{% url 'cars:import_generated' design.pk %}" style="margin-top:12px;">
+        {% csrf_token %}
+        <button type="submit" class="btn">📥 Importer la dernière image IA</button>
+      </form>
+    {% endif %}
+  {% endif %}
+
+  
+</div>
+{% endblock %}

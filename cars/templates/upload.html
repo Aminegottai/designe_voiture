@@ -1,11 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
+<head><meta charset="UTF-8"><title>Importer une image</title></head>
 <body>
-    <h1>Upload Car Image</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Detect</button>
-    </form>
+  <h1>Importer une image et générer un rendu IA</h1>
+
+  {% if messages %}
+    <ul style="color:red">
+      {% for m in messages %}<li>{{ m }}</li>{% endfor %}
+    </ul>
+  {% endif %}
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Envoyer</button>
+  </form>
+
+  {% if design %}
+    <p>Design créé : <a href="{% url 'cars:car_detail' design.pk %}">voir</a></p>
+  {% endif %}
 </body>
 </html>

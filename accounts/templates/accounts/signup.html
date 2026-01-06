@@ -1,177 +1,215 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Créer un compte</title>
-    <style>
-        /* Body */
-        body {
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: #333;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inscription • CarStudio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --accent: #2563eb;
+      --accent-2: #1d4ed8;
+      --border: #e2e8f0;
+      --shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+      --radius: 18px;
+      --radius-sm: 12px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Inter", "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
 
-        /* Container du formulaire */
-        .form-container {
-            background: white;
-            padding: 40px 50px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            width: 100%;
-            max-width: 400px;
-        }
+    .page {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 28px 20px 48px;
+    }
+    header {
+      display: flex; align-items: center; justify-content: flex-end;
+      gap: 10px; margin-bottom: 24px;
+    }
+    .btn {
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    .btn:hover { box-shadow: 0 10px 22px rgba(0,0,0,0.06); transform: translateY(-1px); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff;
+      border: none;
+      box-shadow: 0 12px 30px rgba(37,99,235,0.28);
+    }
 
-        h2 {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 28px;
-            color: #333;
-        }
+    .form-wrapper { display: flex; justify-content: center; }
+    .panel {
+      width: 100%;
+      max-width: 640px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+    h2 { margin: 0 0 6px; font-size: 26px; }
+    .form-desc { margin: 0 0 14px; color: var(--muted); font-size: 14px; }
 
-        /* Conteneur de chaque champ pour espacement */
-        .field-wrapper {
-            margin-bottom: 20px; 
-        }
+    form { margin: 0; }
+    .field-wrapper { margin-bottom: 14px; }
+    label {
+      display: block; margin-bottom: 6px;
+      font-weight: 600; color: var(--text); font-size: 14px;
+    }
+    input, select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: #fff;
+      color: var(--text);
+      font-size: 15px;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+    input:focus, select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(37,99,235,0.12);
+    }
+    button[type="submit"] {
+      width: 100%;
+      padding: 13px 14px;
+      border: none;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 12px 30px rgba(37,99,235,0.28);
+      margin-top: 6px;
+    }
+    button[type="submit"]:hover { transform: translateY(-1px) scale(1.005); }
 
-        /* Style de l'étiquette (Label) */
-        label {
-            display: block; 
-            margin-bottom: 5px; 
-            font-weight: 600; 
-            color: #555;
-            font-size: 14px;
-        }
+    .django-messages {
+      list-style: none;
+      padding: 12px 14px;
+      margin: 0 0 12px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 14px;
+      border: 1px solid var(--border);
+    }
+    .django-messages.error { background: #fef2f2; color: #b91c1c; border-color: #fecdd3; }
+    .django-messages.success { background: #ecfdf3; color: #15803d; border-color: #bbf7d0; }
 
-        /* Inputs */
-        input, select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            outline: none;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            box-sizing: border-box; 
-        }
+    .errorlist {
+      color: #b91c1c;
+      list-style: none;
+      padding-left: 0;
+      margin: 6px 0 0;
+      font-size: 13px;
+    }
+    .helptext {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+      display: block;
+    }
+    .bottom-link {
+      text-align: center;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+    .bottom-link a { color: var(--accent); font-weight: 700; }
 
-        input:focus {
-            border-color: #6a11cb;
-            box-shadow: 0 0 5px rgba(106, 17, 203, 0.5);
-        }
-
-        /* Bouton */
-        button {
-            width: 100%;
-            padding: 15px;
-            margin-top: 10px; 
-            border: none;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        /* Messages Django */
-        .django-messages {
-            list-style: none;
-            padding: 10px 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            font-weight: 500;
-        }
-        
-        .django-messages.error {
-            background-color: #f8d7da; 
-            color: #721c24; 
-            border: 1px solid #f5c6cb;
-        }
-
-        .django-messages.success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        /* Erreurs de champ */
-        .errorlist {
-            color: red;
-            list-style: none;
-            padding-left: 0;
-            margin-top: 5px;
-            margin-bottom: 0;
-            font-size: 0.9em;
-        }
-    </style>
+    @media (max-width: 720px) {
+      .page { padding: 20px 16px 36px; }
+    }
+  </style>
 </head>
 <body>
 
-<div class="form-container">
-    <h2>Créer un compte</h2>
+<div class="page">
+  <header>
+    <a class="btn" href="/">Accueil</a>
+    <a class="btn" href="{% url 'accounts:login' %}">Connexion</a>
+    <a class="btn btn-primary" href="{% url 'accounts:signup' %}">Créer un compte</a>
+  </header>
 
-    {% if messages %}
+  <div class="form-wrapper">
+    <div class="panel">
+      <h2>Inscription</h2>
+      <p class="form-desc">Un compte suffit pour commencer vos rendus AI.</p>
+
+      {% if messages %}
         {% for message in messages %}
-            <ul class="django-messages {{ message.tags }}"> 
-                <li>{{ message }}</li>
-            </ul>
+          <ul class="django-messages {{ message.tags }}">
+            <li>{{ message }}</li>
+          </ul>
         {% endfor %}
-    {% endif %}
+      {% endif %}
 
-    <form method="post">
+      <form method="post">
         {% csrf_token %}
-
         <div class="field-wrapper">
-            {{ form.username.label_tag }}
-            {{ form.username }}
-            {{ form.username.errors }}
+          {{ form.username.label_tag }}
+          {{ form.username }}
+          {{ form.username.errors }}
+          {% if form.username.help_text %}
+            <span class="helptext">{{ form.username.help_text }}</span>
+          {% endif %}
         </div>
 
         <div class="field-wrapper">
-            {{ form.email.label_tag }}
-            {{ form.email }}
-            {{ form.email.errors }}
+          {{ form.email.label_tag }}
+          {{ form.email }}
+          {{ form.email.errors }}
         </div>
 
         <div class="field-wrapper">
-            {{ form.password1.label_tag }}
-            {{ form.password1 }}
-            {{ form.password1.errors }}
+          {{ form.password1.label_tag }}
+          {{ form.password1 }}
+          {{ form.password1.errors }}
+          {% if form.password1.help_text %}
+            <span class="helptext">{{ form.password1.help_text }}</span>
+          {% endif %}
         </div>
 
         <div class="field-wrapper">
-            {{ form.password2.label_tag }}
-            {{ form.password2 }}
-            {{ form.password2.errors }}
+          {{ form.password2.label_tag }}
+          {{ form.password2 }}
+          {{ form.password2.errors }}
+          {% if form.password2.help_text %}
+            <span class="helptext">{{ form.password2.help_text }}</span>
+          {% endif %}
         </div>
 
-        {% if form.non_field_errors %}
-            <ul class="django-messages error">
-                {% for error in form.non_field_errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+        <button type="submit">S'inscrire</button>
+      </form>
 
-        <button type="submit">S’inscrire</button>
-    </form>
-
-    <p style="text-align: center; margin-top: 20px; font-size: 14px;">
-        <a href="{% url 'login' %}" style="color: #6a11cb; text-decoration: none;">
-            Déjà un compte ? Connectez-vous
-        </a>
-    </p>
+      <p class="bottom-link">
+        <a href="{% url 'accounts:login' %}">Déjà un compte ? Connectez-vous</a>
+      </p>
+    </div>
+  </div>
 </div>
 
 </body>
